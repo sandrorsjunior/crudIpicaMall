@@ -3,6 +3,7 @@ using System;
 using CrudIpcaMall.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrudIpcaMall.Migrations
 {
     [DbContext(typeof(ContextOfDataBase))]
-    partial class ContextOfDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20241222220851_addNewAttrInUser")]
+    partial class addNewAttrInUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
