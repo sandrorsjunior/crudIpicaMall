@@ -78,7 +78,8 @@ namespace CrudIpcaMall.src.Services
                 product.Name = productEdit.Name ?? product.Name;
                 product.Qtd = productEdit.Qtd ?? product.Qtd;
                 product.Value = productEdit.Value ?? product.Value;
-                
+                product.Description = productEdit.Description ?? product.Description;
+
                 this._context.Update(product);
                 await _context.SaveChangesAsync();
                 
@@ -110,7 +111,8 @@ namespace CrudIpcaMall.src.Services
                 newProduct.Name = product.Name;
                 newProduct.Qtd = product.Qtd;
                 newProduct.Value = product.Value;
-
+                newProduct.Description = product.Description;
+                newProduct._dateCreation = product._dateCreation;
                 this._context.Add(newProduct);
                 this._context.SaveChanges();
 
