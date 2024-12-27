@@ -14,13 +14,17 @@ namespace CrudIpcaMall.src.Services
             this._context = ctx;
         }
 
-        public async Task<ResponseModel<UsersModel>> CreateNewUser(UsersDTO newUser)
+        public async Task<ResponseModel<UsersModel>> CreateNewUser(UsersCreateDTO newUser)
         {
             ResponseModel<UsersModel> response = new ResponseModel<UsersModel>();
             var user = new UsersModel();
             try{
-                user.Email = newUser.Email;
                 user.Name = newUser.Name;
+                user.Email = newUser.Email;
+                user.Birthday = newUser.Birthday;
+                user.Role = newUser.Role;
+                user.Password = newUser.Password;
+                user._dateCreation = newUser._dateCreation;
                 this._context.Add(user);
                 await this._context.SaveChangesAsync();
 

@@ -23,7 +23,7 @@ namespace CrudIpcaMall.src.Controllers
         }
 
         [HttpPost("creatUser")]
-        public async Task<ActionResult<ResponseModel<UsersModel>>> CriarAutor(UsersDTO userDto)
+        public async Task<ActionResult<ResponseModel<UsersModel>>> CriarAutor(UsersCreateDTO userDto)
         {
             var user = await this._userService.CreateNewUser(userDto);
             return Ok(userDto);

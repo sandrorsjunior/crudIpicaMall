@@ -11,6 +11,6 @@ namespace CrudIpcaMall.src.Repository
     {
         Task<ResponseModel<List<UsersModel>>> ListarUsers();
         Task<ResponseModel<UsersModel>> SearchUserById(int idUser);
-        Task<ResponseModel<UsersModel>> CreateNewUser(UsersDTO newUser);
+        Task<ResponseModel<UsersModel>> CreateNewUser(UsersCreateDTO newUser);
     }
 }

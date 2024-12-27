@@ -13,5 +13,6 @@ namespace CrudIpcaMall.src.Models
         public DateTime Birthday { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
+        public DateTime _dateCreation { get; set; }
     }
 }
