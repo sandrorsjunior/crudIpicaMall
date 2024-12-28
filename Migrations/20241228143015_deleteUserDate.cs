@@ -6,10 +6,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CrudIpcaMall.Migrations
 {
     /// <inheritdoc />
-    public partial class addDateCreationOfNewUser : Migration
+    public partial class deleteUserDate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropColumn(
+                name: "_dateCreation",
+                table: "users");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "_dateCreation",
@@ -17,14 +25,6 @@ namespace CrudIpcaMall.Migrations
                 type: "timestamp with time zone",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "_dateCreation",
-                table: "users");
         }
     }
 }

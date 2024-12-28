@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CrudIpcaMall.src.Models;
 
 namespace CrudIpcaMall.src.DTO
 {
@@ -12,6 +13,5 @@ namespace CrudIpcaMall.src.DTO
         public DateTime Birthday { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
-        public DateTime _dateCreation { get; set; }
     }
 }

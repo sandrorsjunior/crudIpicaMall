@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrudIpcaMall.Migrations
 {
     [DbContext(typeof(ContextOfDataBase))]
-    [Migration("20241222220851_addNewAttrInUser")]
-    partial class addNewAttrInUser
+    [Migration("20241228151622_deleteProduct")]
+    partial class deleteProduct
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,12 +47,45 @@ namespace CrudIpcaMall.Migrations
                     b.Property<float>("Value")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("_dateCreation")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
                     b.ToTable("products");
+                });
+
+            modelBuilder.Entity("CrudIpcaMall.src.Models.RegistersModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProductsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("_dateCreation")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("task")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductsId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("register");
                 });
 
             modelBuilder.Entity("CrudIpcaMall.src.Models.UsersModel", b =>
@@ -85,6 +118,33 @@ namespace CrudIpcaMall.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("CrudIpcaMall.src.Models.RegistersModel", b =>
+                {
+                    b.HasOne("CrudIpcaMall.src.Models.ProductsModel", "Products")
+                        .WithMany("productRegister")
+                        .HasForeignKey("ProductsId");
+
+                    b.HasOne("CrudIpcaMall.src.Models.UsersModel", "Users")
+                        .WithMany("userRegister")
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("CrudIpcaMall.src.Models.ProductsModel", b =>
+                {
+                    b.Navigation("productRegister");
+                });
+
+            modelBuilder.Entity("CrudIpcaMall.src.Models.UsersModel", b =>
+                {
+                    b.Navigation("userRegister");
                 });
 #pragma warning restore 612, 618
         }

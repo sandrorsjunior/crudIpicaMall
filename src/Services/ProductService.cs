@@ -22,7 +22,7 @@ namespace CrudIpcaMall.src.Services
             ResponseModel<List<ProductsModel>> response = new ResponseModel<List<ProductsModel>>();
             
             try{
-                var products = await this._context.products.ToListAsync();
+                var products = await this._context.products.Include(p => p.productRegister).ToListAsync();
                 response.Data = products;
                 response.status = true;
                 response.message = "All products were collected";
@@ -105,6 +105,9 @@ namespace CrudIpcaMall.src.Services
         {
             ResponseModel<ProductsModel> response = new ResponseModel<ProductsModel>();
             var newProduct = new ProductsModel();
+            
+
+            var user = await this._context.users.FirstOrDefaultAsync((usersDB) => usersDB.Id == product.UserId);
 
             try
             {
@@ -112,9 +115,21 @@ namespace CrudIpcaMall.src.Services
                 newProduct.Qtd = product.Qtd;
                 newProduct.Value = product.Value;
                 newProduct.Description = product.Description;
-                newProduct._dateCreation = product._dateCreation;
-                this._context.Add(newProduct);
-                this._context.SaveChanges();
+                await this._context.AddAsync(newProduct);
+                await this._context.SaveChangesAsync();
+
+                RegistersModel newRegister = new RegistersModel();
+
+                newRegister._dateCreation = DateTime.UtcNow;
+                newRegister.UserId = user.Id;
+                newRegister.ProductId = newProduct.Id;
+                newRegister.Users = user;
+                newRegister.Products = newProduct;
+                newRegister.task = "creation_new_product";
+
+
+                await this._context.AddAsync(newRegister);
+                await this._context.SaveChangesAsync();
 
                 response.Data = newProduct;
                 response.status = true;

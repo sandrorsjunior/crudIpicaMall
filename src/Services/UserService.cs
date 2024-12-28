@@ -2,6 +2,7 @@ using CrudIpcaMall.src.Data;
 using CrudIpcaMall.src.DTO;
 using CrudIpcaMall.src.Models;
 using CrudIpcaMall.src.Repository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -14,22 +15,35 @@ namespace CrudIpcaMall.src.Services
             this._context = ctx;
         }
 
-        public async Task<ResponseModel<UsersModel>> CreateNewUser(UsersCreateDTO newUser)
+        public async Task<ResponseModel<UsersModel>> CreateNewUser(UsersCreateDTO user)
         {
             ResponseModel<UsersModel> response = new ResponseModel<UsersModel>();
-            var user = new UsersModel();
-            try{
-                user.Name = newUser.Name;
-                user.Email = newUser.Email;
-                user.Birthday = newUser.Birthday;
-                user.Role = newUser.Role;
-                user.Password = newUser.Password;
-                user._dateCreation = newUser._dateCreation;
-                this._context.Add(user);
+            var newUser = new UsersModel();
+
+            try
+            {
+                newUser.Name = user.Name;
+                newUser.Email = user.Email;
+                newUser.Birthday = user.Birthday;
+                newUser.Role = user.Role;
+                newUser.Password = user.Password;
+
+                await this._context.AddAsync(newUser);
                 await this._context.SaveChangesAsync();
 
-                response.Data = user;
-                response.message = $"New user created\n {newUser.Email}";
+                var newRegister = new RegistersModel
+                {
+                    _dateCreation = DateTime.UtcNow,
+                    UserId = newUser.Id,
+                    Users = newUser,
+                    task = "creation_new_user"
+                };
+
+                await this._context.AddAsync(newRegister);
+                await this._context.SaveChangesAsync();
+
+                response.Data = newUser;
+                response.message = $"New user created\n {user.Email}";
                 response.status = true;
                 return response;
             }
@@ -45,7 +59,7 @@ namespace CrudIpcaMall.src.Services
         {
             ResponseModel<List<UsersModel>> response = new ResponseModel<List<UsersModel>>();
             try{
-                var users = await this._context.users.ToListAsync();
+                var users = await this._context.users.Include(u=> u.userRegister).ToListAsync();
                 response.Data = users;
                 response.message = "All users were collected";
                 response.status = true;

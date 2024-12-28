@@ -3,6 +3,7 @@ using System;
 using CrudIpcaMall.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CrudIpcaMall.Migrations
 {
     [DbContext(typeof(ContextOfDataBase))]
-    partial class ContextOfDataBaseModelSnapshot : ModelSnapshot
+    [Migration("20241228143015_deleteUserDate")]
+    partial class deleteUserDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,10 +60,10 @@ namespace CrudIpcaMall.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ProductsId")
+                    b.Property<int>("ProductsId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UserId")
@@ -121,7 +124,9 @@ namespace CrudIpcaMall.Migrations
                 {
                     b.HasOne("CrudIpcaMall.src.Models.ProductsModel", "Products")
                         .WithMany("productRegister")
-                        .HasForeignKey("ProductsId");
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CrudIpcaMall.src.Models.UsersModel", "Users")
                         .WithMany("userRegister")

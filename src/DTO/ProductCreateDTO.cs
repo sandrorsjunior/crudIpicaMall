@@ -12,6 +12,6 @@ namespace CrudIpcaMall.src.DTO
         public int Qtd {get;set;}
         public float Value {get;set;}
         public string Description { get; set; }
-        public DateTime _dateCreation { get; set; }
+        public int UserId {get;set;}
     }
 }
