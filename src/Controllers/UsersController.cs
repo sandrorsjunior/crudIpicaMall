@@ -29,5 +29,12 @@ namespace CrudIpcaMall.src.Controllers
             return Ok(userDto);
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<ResponseModel<UsersModel>>> Longin(LoginDTO loginDTO)
+        {
+            var login = await this._userService.Login(loginDTO);
+            return Ok(login);
+        }
+
     }
 }

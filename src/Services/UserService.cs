@@ -97,5 +97,32 @@ namespace CrudIpcaMall.src.Services
                 return response;
             }
         }
+
+        public async Task<ResponseModel<LoginDTO>> Login(LoginDTO login)
+        {
+            ResponseModel<LoginDTO> response = new ResponseModel<LoginDTO>();
+            try
+            {
+                var user = await this._context.users.FirstOrDefaultAsync(usr => usr.Email == login.email);
+                if (user == null)
+                {
+                    response.message = $"The user ID:{login.email} wasn't found";
+                    response.status = false;
+                    return response;
+                }
+                response.Data = login;
+                response.message = $"The user:{login.email} was collected";
+                response.status = true;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"There was something issue!\n {ex.Message}");
+                response.status = false;
+                response.message = "There was something issue!";
+                return response;
+            }
+
+        }
     }
 }
