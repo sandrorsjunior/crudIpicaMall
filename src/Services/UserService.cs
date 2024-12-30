@@ -26,7 +26,6 @@ namespace CrudIpcaMall.src.Services
                 newUser.Email = user.Email;
                 newUser.Birthday = user.Birthday;
                 newUser.Role = user.Role;
-                newUser.Password = user.Password;
 
                 await this._context.AddAsync(newUser);
                 await this._context.SaveChangesAsync();
@@ -39,6 +38,15 @@ namespace CrudIpcaMall.src.Services
                     task = "creation_new_user"
                 };
 
+                var PasswordEncryptation = new EncryptionsModel
+                {
+                    Password = user.Password,
+                    Salt = user.Salt,
+                    UserId = newUser.Id,
+                    UsersModel = newUser
+                };
+
+                await this._context.AddAsync(PasswordEncryptation);
                 await this._context.AddAsync(newRegister);
                 await this._context.SaveChangesAsync();
 

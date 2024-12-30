@@ -13,5 +13,6 @@ namespace CrudIpcaMall.src.DTO
         public DateTime Birthday { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
+        public byte[] Salt { get; set; }
     }
 }

@@ -13,5 +13,6 @@ namespace CrudIpcaMall.src.Data
         public DbSet<UsersModel> users {get; set;}
         public DbSet<ProductsModel> products {get; set;}
         public DbSet<RegistersModel> register { get; set; }
+        public DbSet<EncryptionsModel> encryptions { get; set; }
     }
 }
