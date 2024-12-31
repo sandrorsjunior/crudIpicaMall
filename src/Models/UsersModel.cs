@@ -12,6 +12,7 @@ namespace CrudIpcaMall.src.Models
         public string Email {get;set;}
         public DateTime Birthday { get; set; }
         public string Role { get; set; }
+        public EncryptionsModel Password{ get; set; }
         public List<RegistersModel> userRegister { get; set; }
     }
 }

@@ -10,9 +10,20 @@ namespace CrudIpcaMall.src.Data
         {
         }
 
-        public DbSet<UsersModel> users {get; set;}
-        public DbSet<ProductsModel> products {get; set;}
+        public DbSet<UsersModel> users { get; set; }
+        public DbSet<ProductsModel> products { get; set; }
         public DbSet<RegistersModel> register { get; set; }
         public DbSet<EncryptionsModel> encryptions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UsersModel>()
+                .HasOne(u => u.Password) // User has one UserProfile
+                .WithOne(e => e.UsersModel) // UserProfile has one User
+                .HasForeignKey<EncryptionsModel>(e => e.UserId); // Specify the foreign key
+        }
+
     }
+
+
 }

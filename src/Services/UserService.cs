@@ -11,7 +11,8 @@ namespace CrudIpcaMall.src.Services
     public class UserService : UsersInterface
     {
         private readonly ContextOfDataBase _context;
-        public UserService(ContextOfDataBase ctx){
+        public UserService(ContextOfDataBase ctx)
+        {
             this._context = ctx;
         }
 
@@ -22,6 +23,8 @@ namespace CrudIpcaMall.src.Services
 
             try
             {
+
+
                 newUser.Name = user.Name;
                 newUser.Email = user.Email;
                 newUser.Birthday = user.Birthday;
@@ -55,7 +58,8 @@ namespace CrudIpcaMall.src.Services
                 response.status = true;
                 return response;
             }
-            catch (Exception ex){
+            catch (Exception ex)
+            {
                 Console.WriteLine($"There was something issue while we were trying to create a new User!\n {ex.Message}");
                 response.status = false;
                 response.message = "There was something issue while we were trying to create a new User!";
@@ -66,8 +70,9 @@ namespace CrudIpcaMall.src.Services
         public async Task<ResponseModel<List<UsersModel>>> ListarUsers()
         {
             ResponseModel<List<UsersModel>> response = new ResponseModel<List<UsersModel>>();
-            try{
-                var users = await this._context.users.Include(u=> u.userRegister).ToListAsync();
+            try
+            {
+                var users = await this._context.users.Include(u => u.userRegister).Include(p => p.Password).ToListAsync();
                 response.Data = users;
                 response.message = "All users were collected";
                 response.status = true;
@@ -85,9 +90,11 @@ namespace CrudIpcaMall.src.Services
         public async Task<ResponseModel<UsersModel>> SearchUserById(int idUser)
         {
             ResponseModel<UsersModel> response = new ResponseModel<UsersModel>();
-            try{
+            try
+            {
                 var user = await this._context.users.FirstOrDefaultAsync(usr => usr.Id == idUser);
-                if(user==null){
+                if (user == null)
+                {
                     response.message = $"The user ID:{idUser} wasn't found";
                     response.status = false;
                     return response;
@@ -106,19 +113,28 @@ namespace CrudIpcaMall.src.Services
             }
         }
 
-        public async Task<ResponseModel<LoginDTO>> Login(LoginDTO login)
+        public async Task<ResponseModel<EncryptedDataDTO>> Login(LoginDTO login)
         {
-            ResponseModel<LoginDTO> response = new ResponseModel<LoginDTO>();
+            ResponseModel<EncryptedDataDTO> response = new ResponseModel<EncryptedDataDTO>();
+
             try
             {
                 var user = await this._context.users.FirstOrDefaultAsync(usr => usr.Email == login.email);
-                if (user == null)
+                var encrypt = await this._context.encryptions.FirstOrDefaultAsync(en => en.UserId == user.Id);
+
+                if (user == null || encrypt == null)
                 {
                     response.message = $"The user ID:{login.email} wasn't found";
                     response.status = false;
                     return response;
                 }
-                response.Data = login;
+
+                var enryptDataResponse = new EncryptedDataDTO();
+                enryptDataResponse.email = user.Email;
+                enryptDataResponse.salt = encrypt.Salt;
+                enryptDataResponse.password = encrypt.Password;
+
+                response.Data = enryptDataResponse;
                 response.message = $"The user:{login.email} was collected";
                 response.status = true;
                 return response;
