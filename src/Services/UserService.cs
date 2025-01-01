@@ -130,6 +130,7 @@ namespace CrudIpcaMall.src.Services
                 }
 
                 var enryptDataResponse = new EncryptedDataDTO();
+                enryptDataResponse.userId = user.Id;
                 enryptDataResponse.email = user.Email;
                 enryptDataResponse.salt = encrypt.Salt;
                 enryptDataResponse.password = encrypt.Password;
