@@ -120,15 +120,22 @@ namespace CrudIpcaMall.src.Services
             try
             {
                 var user = await this._context.users.FirstOrDefaultAsync(usr => usr.Email == login.email);
-                var encrypt = await this._context.encryptions.FirstOrDefaultAsync(en => en.UserId == user.Id);
-
-                if (user == null || encrypt == null)
+                if (user == null)
                 {
-                    response.message = $"The user ID:{login.email} wasn't found";
+                    response.message = $"The user:{login.email} wasn't found";
                     response.status = false;
                     return response;
                 }
 
+                var encrypt = await this._context.encryptions.FirstOrDefaultAsync(en => en.UserId == user.Id);
+
+                if (encrypt == null)
+                {
+                    response.message = $"The Password wasn't found";
+                    response.status = false;
+                    return response;
+                }
+                
                 var enryptDataResponse = new EncryptedDataDTO();
                 enryptDataResponse.userId = user.Id;
                 enryptDataResponse.email = user.Email;
