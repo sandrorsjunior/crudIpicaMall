@@ -18,9 +18,14 @@ namespace CrudIpcaMall.src.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UsersModel>()
-                .HasOne(u => u.Password) // User has one UserProfile
-                .WithOne(e => e.UsersModel) // UserProfile has one User
-                .HasForeignKey<EncryptionsModel>(e => e.UserId); // Specify the foreign key
+                .HasOne(u => u.Password)
+                .WithOne(e => e.UsersModel)
+                .HasForeignKey<EncryptionsModel>(e => e.UserId) 
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<UsersModel>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
         }
 
     }
